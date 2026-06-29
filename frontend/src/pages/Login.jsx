@@ -46,7 +46,7 @@ export default function Login() {
             autoComplete="username"
             value={identifier}
             onChange={(e) => setIdentifier(e.target.value)}
-            placeholder="jane.doe"
+            placeholder="ananya"
             required
           />
 

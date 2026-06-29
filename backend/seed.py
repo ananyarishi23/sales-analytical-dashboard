@@ -24,13 +24,22 @@ PRODUCTS = [
     ("Standing Desk", "Furniture"),
     ("Notebook Set", "Stationery"),
     ("Gel Pens (Pack of 12)", "Stationery"),
-    ("Coffee Mug", "Home & Living"),
+    ("Steel Water Bottle", "Home & Living"),
     ("Desk Lamp", "Home & Living"),
-    ("Backpack", "Accessories"),
+    ("Laptop Bag", "Accessories"),
+    ("Tiffin Box Set", "Home & Living"),
+    ("Kurta (Cotton)", "Apparel"),
 ]
 
-REGIONS = ["North", "South", "East", "West"]
-CUSTOMERS = ["Acme Corp", "Globex Inc", "Initech", "Umbrella LLC", "Wayne Enterprises", "Stark Industries"]
+REGIONS = ["North", "South", "East", "West", "Central"]
+CUSTOMERS = [
+    "Tata Consultancy Services",
+    "Infosys Ltd",
+    "Reliance Industries",
+    "Wipro Technologies",
+    "Mahindra & Mahindra",
+    "HDFC Bank",
+]
 
 
 def run():
@@ -56,7 +65,7 @@ def run():
         for days_ago in range(0, 180, 3):  # roughly one sale every 3 days for 6 months
             product_name, category = random.choice(PRODUCTS)
             quantity = random.randint(1, 8)
-            unit_price = round(random.uniform(8, 250), 2)
+            unit_price = round(random.uniform(500, 15000), 2)   # INR range
             sale = Sale(
                 user_id=user.id,
                 product_name=product_name,

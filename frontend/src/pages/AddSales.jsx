@@ -8,6 +8,7 @@ const CATEGORY_SUGGESTIONS = [
   "Stationery",
   "Home & Living",
   "Accessories",
+  "Apparel",
   "Software",
   "Services",
 ];
@@ -23,7 +24,7 @@ const EMPTY_FORM = {
 };
 
 function formatCurrency(value) {
-  return new Intl.NumberFormat("en-US", { style: "currency", currency: "USD" }).format(value || 0);
+  return new Intl.NumberFormat("en-IN", { style: "currency", currency: "INR" }).format(value || 0);
 }
 
 export default function AddSales() {
@@ -160,7 +161,7 @@ export default function AddSales() {
                 />
               </div>
               <div className="field">
-                <label htmlFor="unit_price">Unit price (USD)</label>
+                <label htmlFor="unit_price">Unit price (INR ₹)</label>
                 <input
                   id="unit_price"
                   type="number"
@@ -182,7 +183,7 @@ export default function AddSales() {
                   type="text"
                   value={form.customer_name}
                   onChange={update("customer_name")}
-                  placeholder="Acme Corp"
+                  placeholder="Tata Consultancy Services"
                 />
               </div>
               <div className="field">
@@ -192,7 +193,7 @@ export default function AddSales() {
                   type="text"
                   value={form.region}
                   onChange={update("region")}
-                  placeholder="North"
+                  placeholder="Maharashtra"
                 />
               </div>
             </div>

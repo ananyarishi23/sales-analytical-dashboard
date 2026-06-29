@@ -55,7 +55,7 @@ export default function Register() {
             type="text"
             value={form.full_name}
             onChange={update("full_name")}
-            placeholder="Jane Doe"
+            placeholder="Ananya"
             autoComplete="name"
           />
 
@@ -65,7 +65,7 @@ export default function Register() {
             type="text"
             value={form.username}
             onChange={update("username")}
-            placeholder="jane.doe"
+            placeholder="ananya"
             autoComplete="username"
             minLength={3}
             required
@@ -77,7 +77,7 @@ export default function Register() {
             type="email"
             value={form.email}
             onChange={update("email")}
-            placeholder="jane@company.com"
+            placeholder="ananya@company.com"
             autoComplete="email"
             required
           />

@@ -15,19 +15,21 @@ import DashboardLayout from "../components/DashboardLayout";
 import StatCard from "../components/StatCard";
 import { reportsApi } from "../api";
 
-const CHART_PRIMARY = "#3D4FE0";
-const CATEGORY_COLORS = ["#3D4FE0", "#E8A33D", "#1FA97A", "#E0524D", "#5B6178", "#8C6FE0"];
+const CHART_PRIMARY = "#FF6600";   // saffron-orange for Indian brand feel
+const CATEGORY_COLORS = ["#FF6600", "#138808", "#000080", "#E8A33D", "#5B6178", "#8C6FE0"];
 
 function formatCurrency(value) {
-  return new Intl.NumberFormat("en-US", { style: "currency", currency: "USD", maximumFractionDigits: 0 }).format(
-    value || 0
-  );
+  return new Intl.NumberFormat("en-IN", {
+    style: "currency",
+    currency: "INR",
+    maximumFractionDigits: 0,
+  }).format(value || 0);
 }
 
 function monthLabel(key) {
   const [year, month] = key.split("-");
   const date = new Date(Number(year), Number(month) - 1, 1);
-  return date.toLocaleDateString("en-US", { month: "short" });
+  return date.toLocaleDateString("en-IN", { month: "short" });
 }
 
 function ChartTooltip({ active, payload, label }) {
@@ -105,10 +107,10 @@ export default function Reports() {
       ) : (
         <>
           <div className="stat-grid">
-            <StatCard label="Total revenue" value={formatCurrency(summary.total_revenue)} tone="primary" />
-            <StatCard label="Total orders" value={summary.total_orders} tone="amber" />
-            <StatCard label="Avg order value" value={formatCurrency(summary.avg_order_value)} tone="success" />
-            <StatCard label="Units sold" value={summary.total_units} tone="muted" />
+            <StatCard label="Total Revenue" value={formatCurrency(summary.total_revenue)} tone="primary" />
+            <StatCard label="Total Orders" value={summary.total_orders} tone="amber" />
+            <StatCard label="Avg Order Value" value={formatCurrency(summary.avg_order_value)} tone="success" />
+            <StatCard label="Units Sold" value={summary.total_units} tone="muted" />
           </div>
 
           <div className="chart-grid">
@@ -162,7 +164,7 @@ export default function Reports() {
               <thead>
                 <tr>
                   <th>Product</th>
-                  <th className="num">Units sold</th>
+                  <th className="num">Units Sold</th>
                   <th className="num">Revenue</th>
                 </tr>
               </thead>
