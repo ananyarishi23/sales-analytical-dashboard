@@ -1,0 +1,38 @@
+# Render Blueprint for the Sales Analytics Dashboard API.
+#
+# Deploy with this file:
+#   1. Push this repo to GitHub.
+#   2. In the Render Dashboard, click New > Blueprint and select your repo.
+#   3. Render reads this file and provisions the database + web service together.
+#
+# Reference: https://render.com/docs/blueprint-spec
+databases:
+  - name: sales-dashboard-db
+    plan: free
+    databaseName: sales_dashboard
+    user: sales_dashboard_user
+
+services:
+  - type: web
+    name: sales-dashboard-api
+    runtime: python
+    plan: free
+    rootDir: backend
+    buildCommand: "pip install -r requirements.txt"
+    startCommand: "gunicorn app:app"
+    healthCheckPath: /api/health
+    envVars:
+      - key: PYTHON_VERSION
+        value: "3.12.0"
+      - key: DATABASE_URL
+        fromDatabase:
+          name: sales-dashboard-db
+          property: connectionString
+      - key: SECRET_KEY
+        generateValue: true
+      - key: JWT_SECRET_KEY
+        generateValue: true
+      # Update this to your real Vercel URL after the frontend is deployed,
+      # e.g. https://sales-analytics-dashboard.vercel.app
+      - key: CORS_ORIGINS
+        value: "*"
