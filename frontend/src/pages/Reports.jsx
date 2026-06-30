@@ -3,13 +3,18 @@ import {
   ResponsiveContainer,
   AreaChart,
   Area,
+  LineChart,
+  Line,
   XAxis,
   YAxis,
   CartesianGrid,
   Tooltip,
+  Legend,
   BarChart,
   Bar,
   Cell,
+  PieChart,
+  Pie,
 } from "recharts";
 import DashboardLayout from "../components/DashboardLayout";
 import StatCard from "../components/StatCard";
@@ -26,20 +31,31 @@ function formatCurrency(value) {
   }).format(value || 0);
 }
 
+function formatCompactCurrency(value) {
+  return new Intl.NumberFormat("en-IN", {
+    style: "currency",
+    currency: "INR",
+    notation: "compact",
+    maximumFractionDigits: 1,
+    minimumFractionDigits: 0,
+  }).format(value || 0);
+}
+
 function monthLabel(key) {
   const [year, month] = key.split("-");
   const date = new Date(Number(year), Number(month) - 1, 1);
   return date.toLocaleDateString("en-IN", { month: "short" });
 }
 
-function ChartTooltip({ active, payload, label }) {
+function ChartTooltip({ active, payload, label, valueFormatter }) {
   if (!active || !payload || !payload.length) return null;
+  const format = valueFormatter || ((v) => (typeof v === "number" ? formatCurrency(v) : v));
   return (
     <div className="chart-tooltip">
       <p className="chart-tooltip-label">{label}</p>
       {payload.map((p) => (
         <p key={p.dataKey} className="chart-tooltip-value">
-          {p.name}: {typeof p.value === "number" ? formatCurrency(p.value) : p.value}
+          {p.name}: {format(p.value)}
         </p>
       ))}
     </div>
@@ -126,7 +142,14 @@ export default function Reports() {
                   </defs>
                   <CartesianGrid strokeDasharray="3 3" stroke="#E3E6F0" vertical={false} />
                   <XAxis dataKey="label" axisLine={false} tickLine={false} stroke="#5B6178" fontSize={12} />
-                  <YAxis axisLine={false} tickLine={false} stroke="#5B6178" fontSize={12} width={40} />
+                  <YAxis
+                    axisLine={false}
+                    tickLine={false}
+                    stroke="#5B6178"
+                    fontSize={12}
+                    width={64}
+                    tickFormatter={formatCompactCurrency}
+                  />
                   <Tooltip content={<ChartTooltip />} />
                   <Area
                     type="monotone"
@@ -146,7 +169,14 @@ export default function Reports() {
                 <BarChart data={categories} margin={{ top: 8, right: 8, left: 0, bottom: 0 }}>
                   <CartesianGrid strokeDasharray="3 3" stroke="#E3E6F0" vertical={false} />
                   <XAxis dataKey="category" axisLine={false} tickLine={false} stroke="#5B6178" fontSize={12} />
-                  <YAxis axisLine={false} tickLine={false} stroke="#5B6178" fontSize={12} width={40} />
+                  <YAxis
+                    axisLine={false}
+                    tickLine={false}
+                    stroke="#5B6178"
+                    fontSize={12}
+                    width={64}
+                    tickFormatter={formatCompactCurrency}
+                  />
                   <Tooltip content={<ChartTooltip />} />
                   <Bar dataKey="revenue" name="Revenue" radius={[6, 6, 0, 0]}>
                     {categories.map((entry, idx) => (
@@ -154,6 +184,63 @@ export default function Reports() {
                     ))}
                   </Bar>
                 </BarChart>
+              </ResponsiveContainer>
+            </section>
+
+            <section className="card chart-card">
+              <h2>Orders trend (last 6 months)</h2>
+              <ResponsiveContainer width="100%" height={260}>
+                <LineChart data={trend} margin={{ top: 8, right: 8, left: 0, bottom: 0 }}>
+                  <CartesianGrid strokeDasharray="3 3" stroke="#E3E6F0" vertical={false} />
+                  <XAxis dataKey="label" axisLine={false} tickLine={false} stroke="#5B6178" fontSize={12} />
+                  <YAxis
+                    axisLine={false}
+                    tickLine={false}
+                    stroke="#5B6178"
+                    fontSize={12}
+                    width={36}
+                    allowDecimals={false}
+                  />
+                  <Tooltip content={<ChartTooltip valueFormatter={(v) => v} />} />
+                  <Line
+                    type="monotone"
+                    dataKey="orders"
+                    name="Orders"
+                    stroke="#000080"
+                    strokeWidth={2}
+                    dot={{ r: 3, fill: "#000080" }}
+                    activeDot={{ r: 5 }}
+                  />
+                </LineChart>
+              </ResponsiveContainer>
+            </section>
+
+            <section className="card chart-card">
+              <h2>Units sold by category</h2>
+              <ResponsiveContainer width="100%" height={260}>
+                <PieChart margin={{ top: 8, right: 8, left: 8, bottom: 8 }}>
+                  <Tooltip content={<ChartTooltip valueFormatter={(v) => `${v} ${v === 1 ? "unit" : "units"}`} />} />
+                  <Legend
+                    verticalAlign="bottom"
+                    height={32}
+                    iconType="circle"
+                    wrapperStyle={{ fontSize: 12, color: "#5B6178" }}
+                  />
+                  <Pie
+                    data={categories}
+                    dataKey="units"
+                    nameKey="category"
+                    cx="50%"
+                    cy="46%"
+                    innerRadius={55}
+                    outerRadius={90}
+                    paddingAngle={2}
+                  >
+                    {categories.map((entry, idx) => (
+                      <Cell key={entry.category} fill={CATEGORY_COLORS[idx % CATEGORY_COLORS.length]} />
+                    ))}
+                  </Pie>
+                </PieChart>
               </ResponsiveContainer>
             </section>
           </div>
